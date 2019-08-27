@@ -1,6 +1,8 @@
 # 200-901
 Study Materials for DevNet Associate Exam v1.0 (200-901)
 
+https://developer.cisco.com/certification/exam-topic-associate/
+
 # Exam Description: 
 DevNet Associate Exam v1.0 (DEVASC 200-901) is a 120-minute exam associated
 with the DevNet Associate - Developer Certification. This exam tests a candidate's knowledge of
