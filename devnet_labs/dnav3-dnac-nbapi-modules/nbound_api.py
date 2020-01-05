@@ -1,4 +1,5 @@
 import os
+import sys
 import requests
 from requests.auth import HTTPBasicAuth
 
@@ -43,4 +44,3 @@ def get_url(url):
 
     return response.json()
 
-    
