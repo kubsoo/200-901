@@ -44,3 +44,27 @@ def get_url(url):
 
     return response.json()
 
+def ip_to_id(ip):
+    return get_url("network-device/ip-address/%s" % ip)['response']['id']
+
+
+def get_modules(id):
+   return get_url("network-device/module?deviceId=%s" % id)
+
+def print_info(modules):
+    print("{0:30}{1:15}{2:25}{3:5}".format("Module Name","Serial Number","Part Number","Is Field Replaceable?"))
+    for module in modules['response']:
+        print("{moduleName:30}{serialNumber:15}{partNumber:25}{moduleType:5}".format(moduleName=module['name'],
+                                                           serialNumber=module['serialNumber'],
+                                                           partNumber=module['partNumber'],
+                                                           moduleType=module['isFieldReplaceable']))
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        dev_id = ip_to_id(sys.argv[1])
+        modules = get_modules(dev_id)
+
+        print_info(modules)
+
+    else:
+        print("Usage: %s device_ip" % sys.argv[0])
