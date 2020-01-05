@@ -63,7 +63,6 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         dev_id = ip_to_id(sys.argv[1])
 
-        print(dev_id)
         modules = get_modules(dev_id)
 
         print_info(modules)
