@@ -16,25 +16,23 @@ def get_token(host,username,password,api_version):
     return token
 
 
-def get_host(host,token,api_version,source_ip=None,mac=None,name=None):
+def get_host(host,token,api_version,ip=None,mac=None,name=None):
     url = '{}/api/{}/host'.format(host,api_version)
     headers = {
         "x-auth-token":token
     }
     
     params = {
-        "hostIp" : source_ip,
+        "hostIp" : ip,
         "hostMac" : mac,
         "hostName" : name
     }
 
     response = requests.get(url,headers=headers,verify=False,params=params)
     
+    r = response.json()["response"][0]
 
-
-    print(response.text)
-
-    return response
+    return r
 
 
 def get_network_devices(host,token,api_version):
@@ -70,9 +68,49 @@ def flow_analysis(host,token,api_version,source_ip,destination_ip):
      }
 
     response = requests.post(url,headers=headers,params=params,verify=False)
-    print(response.text)
+    r = response.json()["response"][0]
+    print(r)
+    return r
 
-    return response  
+
+def print_host_details(host):
+    """
+    Print to screen interesting details about a given host.
+    Input Paramters are:
+      host_desc: string to describe this host.  Example "Source"
+      host: dictionary object of a host returned from APIC-EM
+    Standard Output Details:
+      Host Name (hostName) - If available
+      Host IP (hostIp)
+      Host MAC (hostMac)
+      Network Type (hostType) - wired/wireless
+      Host Sub Type (subType)
+      VLAN (vlanId)
+      Connected Network Device (connectedNetworkDeviceIpAddress)
+
+    Wired Host Details:
+      Connected Interface Name (connectedInterfaceName)
+
+    Wireless Host Details:
+      Connected AP Name (connectedAPName)
+    """
+    if "hostName" not in host.keys():
+        print("Host Name: Unavailable")
+    else:    
+        print("Host Name: {}".format(host["hostName"]))
+    print("Network Type: {}".format(host["hostType"]))
+    print("Connected Network Device: {}".format(host["connectedNetworkDeviceIpAddress"]))
+
+    if host["hostType"] == "wired":
+        print("Connected Interface Name: {}".format(host["connectedInterfaceName"]))  # noqa: E501
+    if host["hostType"] == "wireless":
+        print("Connected AP Name: {}".format(host["connectedAPName"]))
+
+    print("VLAN: {}".format(host["vlanId"]))
+    print("Host IP: {}".format(host["hostIp"]))
+    print("Host MAC: {}".format(host["hostMac"]))
+    print("Host Sub Type: {}".format(host["subType"]))
+
 
 
 if __name__ == "__main__":
@@ -89,11 +127,20 @@ if __name__ == "__main__":
     source_ip = args.source_ip
     destination_ip = args.destination_ip
 
-    print(source_ip,destination_ip)
+  # print(source_ip,destination_ip)
 
-    mac = "00:1e:13:a5:b9:40"
+   # mac = "00:1e:13:a5:b9:40"
 
-    get_host(host,token,api_version)
+    source_host = get_host(host,token,api_version,ip=source_ip)
+    print("Source Host Details:\n-------------------------")
+    print_host_details(source_host)
 
+    destination_host = get_host(host,token,api_version,ip=destination_ip)
+    print("Destination Host Details:\n-------------------------")
+    print_host_details(destination_host)
+
+
+
+#   print_host_details(host)
 
     #flow_analysis(host,token,api_version,source_ip,destination_ip)
