@@ -16,15 +16,54 @@ def get_token(host,username,password,api_version):
     return token
 
 
-def get_host(host,token,api_version):
+def get_host(host,token,api_version,source_ip):
     url = '{}/api/{}/host'.format(host,api_version)
+    headers = {
+        "x-auth-token":token
+    }
+    
+    params = {
+        "hostIp" : source_ip
+    }
+    
+    response = requests.get(url,headers=headers,verify=False,params=params)
+    
+    print(response.text)
+
+    return response
+
+
+def get_network_devices(host,token,api_version):
+    url = '{}/api/{}/network-device'.format(host,api_version)
     headers = {
         "x-auth-token":token
     }
     response = requests.get(url,headers=headers,verify=False)
     print(response.text)
 
-    return response
+    return response    
+
+
+def get_interface(host,token,api_version,id):
+    url = '{}/api/{}/interface/{}'.format(host,api_version,id)
+    headers = {
+        "x-auth-token":token
+    }
+    response = requests.get(url,headers=headers,verify=False)
+    print(response.text)
+
+    return response   
+
+def flow_analysis(host,token,api_version):
+    url = '{}/api/{}/flow-analysis'.format(host,api_version)
+    headers = {
+        "x-auth-token":token
+    }
+    response = requests.get(url,headers=headers,verify=False)
+    print(response.text)
+
+    return response  
+
 
 if __name__ == "__main__":
     token = get_token(host,username,password,api_version)
@@ -43,4 +82,4 @@ if __name__ == "__main__":
     print(source_ip,destination_ip)
 
 
-    get_host(host,token,api_version)
+    get_host(host,token,api_version,source_ip)
