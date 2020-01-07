@@ -25,7 +25,7 @@ def get_host(host,token,api_version,source_ip):
     params = {
         "hostIp" : source_ip
     }
-    
+
     response = requests.get(url,headers=headers,verify=False,params=params)
     
     print(response.text)
@@ -54,12 +54,18 @@ def get_interface(host,token,api_version,id):
 
     return response   
 
-def flow_analysis(host,token,api_version):
+def flow_analysis(host,token,api_version,source_ip,destination_ip):
     url = '{}/api/{}/flow-analysis'.format(host,api_version)
     headers = {
         "x-auth-token":token
     }
-    response = requests.get(url,headers=headers,verify=False)
+    
+    params = {
+        "sourceIP" : source_ip, 
+        "destIP" : destination_ip
+     }
+
+    response = requests.post(url,headers=headers,params=params,verify=False)
     print(response.text)
 
     return response  
@@ -82,4 +88,7 @@ if __name__ == "__main__":
     print(source_ip,destination_ip)
 
 
-    get_host(host,token,api_version,source_ip)
+    #get_host(host,token,api_version,source_ip)
+
+
+    flow_analysis(host,token,api_version,source_ip,destination_ip)
