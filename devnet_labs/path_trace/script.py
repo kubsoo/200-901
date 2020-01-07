@@ -16,18 +16,22 @@ def get_token(host,username,password,api_version):
     return token
 
 
-def get_host(host,token,api_version,source_ip):
+def get_host(host,token,api_version,source_ip=None,mac=None,name=None):
     url = '{}/api/{}/host'.format(host,api_version)
     headers = {
         "x-auth-token":token
     }
     
     params = {
-        "hostIp" : source_ip
+        "hostIp" : source_ip,
+        "hostMac" : mac,
+        "hostName" : name
     }
 
     response = requests.get(url,headers=headers,verify=False,params=params)
     
+
+
     print(response.text)
 
     return response
@@ -87,8 +91,9 @@ if __name__ == "__main__":
 
     print(source_ip,destination_ip)
 
+    mac = "00:1e:13:a5:b9:40"
 
-    #get_host(host,token,api_version,source_ip)
+    get_host(host,token,api_version)
 
 
-    flow_analysis(host,token,api_version,source_ip,destination_ip)
+    #flow_analysis(host,token,api_version,source_ip,destination_ip)
