@@ -115,7 +115,6 @@ def print_host_details(host):
 
 if __name__ == "__main__":
     token = get_token(host,username,password,api_version)
-    print(token)
     parser = argparse.ArgumentParser()
     parser.add_argument("source_ip", help = "Source IP Address")
     parser.add_argument("destination_ip", help = "Destination IP Address")
@@ -131,14 +130,19 @@ if __name__ == "__main__":
 
    # mac = "00:1e:13:a5:b9:40"
 
+    #list_host = get_host(host,token,api_version)
+
+    #print(list_host)
+
     source_host = get_host(host,token,api_version,ip=source_ip)
     print("Source Host Details:\n-------------------------")
     print_host_details(source_host)
+    print("\n\n")
 
     destination_host = get_host(host,token,api_version,ip=destination_ip)
     print("Destination Host Details:\n-------------------------")
     print_host_details(destination_host)
-
+    print("\n\n")
 
 
 #   print_host_details(host)
