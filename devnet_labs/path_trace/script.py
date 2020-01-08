@@ -62,10 +62,9 @@ def get_interface(host,token,api_version,id):
     #}
 
     response = requests.get(url,headers=headers,verify=False)
-    print(response.text)
-    #r = response.json()["response"][0]
+    r = response.json()["response"]
 
-    return response  
+    return r
 
 def flow_analysis(host,token,api_version,source_ip,destination_ip):
     url = '{}/api/{}/flow-analysis'.format(host,api_version)
@@ -80,7 +79,7 @@ def flow_analysis(host,token,api_version,source_ip,destination_ip):
 
     response = requests.post(url,headers=headers,params=params,verify=False)
     r = response.json()["response"][0]
-    print(r)
+
     return r
 
 
@@ -225,6 +224,11 @@ if __name__ == "__main__":
     source_network_device=get_network_devices(host,token,api_version,ip=source_network_device_ip)
     print("Source Host Network Connection Details:\n---------------------------------------------")
     print_network_device_details(source_network_device)
+    print("\n\n")   
+
+    source_interface = get_interface(host,token,api_version,source_interface_id)
+    print("Attached Interface:\n---------------------------------------------")
+    print_interface_details(source_interface)
     print("\n\n")    
 
     destination_network_device=get_network_devices(host,token,api_version,ip=destination_network_device_ip)
@@ -232,10 +236,10 @@ if __name__ == "__main__":
     print_network_device_details(destination_network_device)
     print("\n\n")    
 
+    desination_interface = get_interface(host,token,api_version,desination_interface_id)
+    print("Attached Interface:\n---------------------------------------------")
+    print_interface_details(desination_interface)
+    print("\n\n")   
 
-    a = get_interface(host,token,api_version,desination_interface_id)
-    print(a)
-    #b = get_host(host,token,api_version,ip=source_ip)
-    #print(b)
 
     #flow_analysis(host,token,api_version,source_ip,destination_ip)
